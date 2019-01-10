@@ -10,8 +10,8 @@
   </p>
 </div>
 
-## :grey_question: About
+## About :grey_question:
 Yet to write this section
 
-## :computer: Commands
+## Commands :computer:
 TODO: add documentation of the available commands here.
