@@ -2,9 +2,9 @@
 	<img width="500" height="350" src="media/logo.svg" alt="Hylla">
   <br>
   <br>
-  <p width="300">
+  <p>
     <i>
-      Hylla is Swedish, meaning both 'shelf' and 'honour'.
+      Hylla is Swedish, meaning both 'shelf' and 'honour'.<br/>
       So, honour your projects by neatly organizing them in a digital shelf using simple commands.
     <i>
   </p>
