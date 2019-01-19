@@ -129,7 +129,7 @@ def open_project(config, name, safe):
     dir = project[1]
     if not os.path.exists(dir):
         click.secho('Error! The project directory is missing', bg='red', fg='white')
-        click.secho('Error! The project directory is missing', bg='green', fg='white')
+        click.secho('Creating a new one!', bg='green', fg='white')
         os.mkdir(dir)
 
     click.echo('Project directory:')
@@ -140,6 +140,9 @@ def open_project(config, name, safe):
         os.chdir(dir)
         for command in commands:
             os.system(command)
+    else:
+        click.echo('Safe mode is active and no commands are therefor executed')
+
 
 # 'Edit' command:
 @cli.command('edit')
@@ -147,6 +150,27 @@ def edit():
     """Edit or delete a project"""
     click.echo('This command is yet to be implemented')
     # Important to allow the user to change the 'code' data!
+
+
+# 'remove' command:
+@cli.command('remove')
+@click.argument('name')
+@pass_config
+def delete(config, name):
+    """Delete a project"""
+    config.c.execute("SELECT * FROM projects WHERE name=:name", {'name':name})
+    if config.c.fetchone():
+        if click.confirm(f'Are you sure you want to remove the {name}'):
+            with config.conn:
+                config.c.execute('DELETE FROM projects WHERE name=:name', {'name':name})
+                click.secho('The project has now been removed from the database!', bg='red', fg='white')
+                click.echo('NOTE: All files are still present.')
+        else:
+            click.echo('OK, the project was not removed!')
+    else:
+        click.secho('Error! A project with that name does not exist', bg='red', fg='white')
+        exit()
+
 
 # 'List' command:
 @cli.command('list')
