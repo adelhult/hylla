@@ -109,6 +109,7 @@ def new(config, name, tags, readme_template, commands):
     # Create a readme file in the directory
     create_readme(readme_template, project_dir, project_name)
 
+
 # 'Open' command:
 @cli.command('open')
 @click.argument('name')
@@ -146,13 +147,16 @@ def open_project(config, name, safe):
 
 # 'Edit' command:
 @cli.command('edit')
-def edit():
+@click.argument('current_name')
+def edit(current_name):
     """Edit or delete a project"""
+    # WRITE THIS LATER!!!
     click.echo('This command is yet to be implemented')
+    #new_name = click.prompt('Updated name', default=current_name, type=str, show_default=True)
     # Important to allow the user to change the 'code' data!
 
 
-# 'remove' command:
+# 'Remove' command:
 @cli.command('remove')
 @click.argument('name')
 @pass_config
@@ -179,7 +183,6 @@ def list(config):
     """List your projects"""
     for project in fetch_all_projects(config):
         print(project.name, project.tags_str)
-
 
 # Function used to create the readme file
 def create_readme(template_path, project_dir, project_name):
