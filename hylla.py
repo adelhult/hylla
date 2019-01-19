@@ -69,8 +69,9 @@ def open_docs():
 @click.option('--readme-template',
              envvar='HYLLA_README_TEMPLATE',
              type=click.Path(exists=True, dir_okay=False))
+@click.option('--commands', is_flag=True)
 @pass_config
-def new(config, name, tags, readme_template):
+def new(config, name, tags, readme_template, commands):
     """Create a new project"""
     # define vars project_name and project_dir
     project_name, project_dir = parse_project_data(name, config)
@@ -80,8 +81,13 @@ def new(config, name, tags, readme_template):
         click.secho('Error! Project name is already used', bg='red', fg='white')
         exit()
 
+    # open the notepad if the user used the flag --commands
+    if commands:
+        code = click.edit()
+    else:
+        code = ''
     # Add to database
-    add_to_database(project_name, project_dir, tags, config)
+    add_to_database(project_name, project_dir, tags, config, code)
 
     # print info
     click.echo(f'Project name: {project_name}')
@@ -93,6 +99,39 @@ def new(config, name, tags, readme_template):
     # Create a readme file in the directory
     create_readme(readme_template, project_dir, project_name)
 
+# 'Open' command:
+@cli.command('open')
+@click.argument('name')
+@click.option('--safe', is_flag=True)
+@pass_config
+def open_project(config, name, safe):
+    """Open a project"""
+    config.c.execute("SELECT * FROM projects WHERE name=:name", {'name':name})
+    project = config.c.fetchone()
+
+    # does the project exist
+    if not project:
+        click.secho('Error! A project with that name does not exist', bg='red', fg='white')
+        exit()
+
+    # Should perhaps parse the data to a Project object instead.
+    # Check if the folder exists
+    dir = project[1]
+    if not os.path.exists(dir):
+        click.secho('Error! The project directory is missing', bg='red', fg='white')
+        click.secho('Error! The project directory is missing', bg='green', fg='white')
+        os.mkdir(dir)
+
+    click.echo('Project directory:')
+    click.echo(dir)
+
+    if not safe:
+        commands = project[3].split('\n')
+        os.chdir(dir)
+        for command in commands:
+            os.system(command)
+
+
 # 'List' command:
 @cli.command('list')
 @pass_config
@@ -100,6 +139,7 @@ def list(config):
     """List your projects"""
     for project in fetch_all_projects(config):
         print(project.name, project.tags_str)
+
 
 # Function used to create the readme file
 def create_readme(template_path, project_dir, project_name):
@@ -130,9 +170,8 @@ def project_exists(name, dir, config):
     return False
 
 # Adds the project to the database
-def add_to_database(name, dir, tags, config):
-    code = ''
-    date = datetime.datetime.now()
+def add_to_database(name, dir, tags, config, code):
+    date = str(datetime.date.today())
     tags_string = ', '.join(str(e) for e in tags)
     with config.conn:
         config.c.execute("INSERT INTO projects VALUES (?, ?, ?, ?, ?, NULL)",
@@ -149,7 +188,6 @@ def fetch_all_projects(config):
                                 p[4],
                                 p[5]))
     return projects
-
 
 if __name__ == '__main__':
     cli()
