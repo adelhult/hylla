@@ -32,7 +32,7 @@ Note, if Hylla is executed without specifying a command, a list of all available
 	```--commands```
 	Allows the user to write a list of commands that will be executed every time the project is opened.
 	
-	```--commands```
+	```--help```
 	Prints help information about the 'new' command.
 	
 * ### Open a project
@@ -42,10 +42,10 @@ Note, if Hylla is executed without specifying a command, a list of all available
 	```
 	**Options:**
 	
-	```--commands```
+	```--safe```
 	If the safe flag is added, no commands will be executed.
 	
-	```--commands```
+	```--help```
 	Prints help information about the 'open' command.
 
 * ### List all projects
