@@ -83,7 +83,8 @@ def new(config, name, tags, readme_template, commands):
 
     # open the notepad if the user used the flag --commands
     if commands:
-        code = click.edit()
+        MARKER = '# Everything above this line is executed when \'hylla open\' is used.'
+        code = click.edit(MARKER).split(MARKER, 1)[0]
     else:
         code = ''
     # Add to database
