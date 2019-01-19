@@ -6,7 +6,7 @@
     		<i>
       			Hylla is Swedish, meaning both 'shelf' and 'honour'.<br/>
       			So, honour your projects by neatly organizing them on a digital shelf using simple commands.
-    		<i>
+    		</i>
   	</p>
 </div>
 
