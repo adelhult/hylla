@@ -131,6 +131,12 @@ def open_project(config, name, safe):
         for command in commands:
             os.system(command)
 
+# 'Edit' command:
+@cli.command('edit')
+def edit():
+    """Edit or delete a project"""
+    click.echo('This command is yet to be implemented')
+    # Important to allow the user to change the 'code' data!
 
 # 'List' command:
 @cli.command('list')
