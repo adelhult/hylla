@@ -84,9 +84,18 @@ def new(config, name, tags, readme_template, commands):
     # open the notepad if the user used the flag --commands
     if commands:
         MARKER = '# Everything above this line is executed when \'hylla open\' is used.'
-        code = click.edit(MARKER).split(MARKER, 1)[0]
+        # If on windows, add a command to open a new cmd in the workin dir
+        if os.name == 'nt':
+            open_cmd_code = f'start "Hylla - {project_name}" /D {project_dir} \n'
+            code =click.edit(open_cmd_code + MARKER).split(MARKER, 1)[0]
+        else:
+            code = click.edit(MARKER).split(MARKER, 1)[0]
     else:
-        code = ''
+        if os.name == 'nt':
+            code = f'start "Hylla - {project_name}" /D {project_dir} \n'
+        else:
+            code = ''
+
     # Add to database
     add_to_database(project_name, project_dir, tags, config, code)
 
