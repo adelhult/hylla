@@ -70,8 +70,9 @@ def open_docs():
              envvar='HYLLA_README_TEMPLATE',
              type=click.Path(exists=True, dir_okay=False))
 @click.option('--commands', is_flag=True)
+@click.option('--clone', is_flag=True)
 @pass_config
-def new(config, name, tags, readme_template, commands):
+def new(config, name, tags, readme_template, commands, clone):
     """Create a new project"""
     # define vars project_name and project_dir
     project_name, project_dir = parse_project_data(name, config)
@@ -103,11 +104,23 @@ def new(config, name, tags, readme_template, commands):
     click.echo(f'Project name: {project_name}')
     click.echo(f'Tags: {tags}')
 
-    #Create folder
+    #Create folder!
     os.mkdir(project_dir)
     click.echo('Project directory created!')
     # Create a readme file in the directory
-    create_readme(readme_template, project_dir, project_name)
+    if clone:
+        url = click.prompt('Git URL', type=str)
+        # would be good to check if the input is valid.
+        # and check if git exists in the path as well!
+        os.chdir(project_dir)
+        os.system(f'git clone {url} .')
+        click.echo(f'Project directory cloned from {url}!')
+
+    # If the user choose not to clone a readme is created.
+    else:
+        create_readme(readme_template, project_dir, project_name)
+
+
 
 
 # 'Open' command:
