@@ -77,5 +77,10 @@ Work in progress
 ### Delete a project
 Work in progress
 
+
+### Open the directory where all the projects are
+```
+hylla home
+```
 ## License
 [MIT License](https://choosealicense.com/licenses/mit/)
