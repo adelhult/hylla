@@ -73,3 +73,6 @@ Work in progress
 
 ### Delete a project
 Work in progress
+
+## License
+[MIT License](https://choosealicense.com/licenses/mit/)
