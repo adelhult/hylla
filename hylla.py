@@ -37,7 +37,7 @@ def cli(config, location):
     """Hylla. Organize all your projects from the command-line"""
     config.location = location
     # Database connection and vars
-    conn = sqlite3.connect(os.path.join(location, 'hylla_datebase.db'))
+    conn = sqlite3.connect(os.path.join(location, 'hylla_database.db'))
     c = conn.cursor()
     # add to config object
     config.conn = conn
