@@ -109,7 +109,7 @@ def new(config, name, tags, readme_template, commands, clone):
     click.echo('Project directory created!')
     # Create a readme file in the directory
     if clone:
-        url = click.prompt('Git URL', type=str)
+        url = click.prompt('Git URL')
         # would be good to check if the input is valid.
         # and check if git exists in the path as well!
         os.chdir(project_dir)
@@ -119,8 +119,6 @@ def new(config, name, tags, readme_template, commands, clone):
     # If the user choose not to clone a readme is created.
     else:
         create_readme(readme_template, project_dir, project_name)
-
-
 
 
 # 'Open' command:
@@ -173,15 +171,15 @@ def edit(current_name):
 @cli.command('remove')
 @click.argument('name')
 @pass_config
-def delete(config, name):
-    """Delete a project"""
+def remove(config, name):
+    """Remove a project from the database"""
     config.c.execute("SELECT * FROM projects WHERE name=:name", {'name':name})
     if config.c.fetchone():
         if click.confirm(f'Are you sure you want to remove the {name}'):
             with config.conn:
                 config.c.execute('DELETE FROM projects WHERE name=:name', {'name':name})
                 click.secho('The project has now been removed from the database!', bg='red', fg='white')
-                click.echo('NOTE: All files are still present.')
+                click.echo('NOTE: All files are still left in the directory.')
         else:
             click.echo('OK, the project was not removed!')
     else:
@@ -212,6 +210,14 @@ def create_readme(template_path, project_dir, project_name):
             click.echo('Created a standard README file')
     else:
         click.echo('A README does already exist in the folder')
+
+
+@cli.command('home')
+@pass_config
+def home(config):
+    """ Open the dir with all the projects"""
+    print(config.location)
+    click.launch(config.location, locate=False)
 
 def parse_project_data(name, config):
     project_name = name.strip().lower().replace(' ', '_')
