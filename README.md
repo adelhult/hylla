@@ -1,5 +1,5 @@
 <div align="center">
-	<img width="500" height="350" src="media/logo.svg" alt="Hylla">
+	<img width="400" height="280" src="media/logo.svg" alt="Hylla">
   	<br>
   	<br>
   	<p>
