@@ -33,12 +33,15 @@ hylla new [OPTIONS] NAME [TAGS] ...
 ```
 **Options:**
 
+```--commands```
+Allows the user to write a list of commands that will be executed every time the project is opened.
+
+```--clone```
+The user will later be prompted to enter the URL to a repository to git clone from.
+
 ```--readme-template FILE```
 Specify a template which will be used to create the project README.md, 
 the environmental variable HYLLA_README_TEMPLATE can also be used.
-
-```--commands```
-Allows the user to write a list of commands that will be executed every time the project is opened.
 
 ```--help```
 Prints help information about the 'new' command.
