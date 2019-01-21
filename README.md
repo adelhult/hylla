@@ -14,7 +14,7 @@
 Yet to write this section
 
 ## Usage :computer:
-Before you start using Hylla, define the environmental variable ```HYLLA_LOCATION``` to let the program know where all your projects should be stored. (Must be the path of an existing directory.)
+Before you start using Hylla, define the environmental variable ```HYLLA_LOCATION``` to let the program know where all your projects should be stored. (Must be the path to an existing directory.)
 ```
 hylla [OPTIONS] COMMAND [ARGS]
 ```
