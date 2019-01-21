@@ -10,10 +10,17 @@
   	</p>
 </div>
 
-## About :grey_question:
-Yet to write this section
+## :star: Features
+* Create project directories and keep them organized in one place.
 
-## Usage :computer:
+* Generate a README.md file for every project.
+
+* List all projects and search for them with subject tags.
+
+* Launch custom scripts and start software every time a project is opened. 
+
+
+## :computer: Usage
 Before you start using Hylla, define the environmental variable ```HYLLA_LOCATION``` to let the program know where all your projects should be stored. (Must be the path to an existing directory.)
 ```
 hylla [OPTIONS] COMMAND [ARGS]
