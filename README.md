@@ -78,7 +78,7 @@ Work in progress
 Work in progress
 
 
-### Open the directory where all the projects are
+### Open the directory where all the projects are stored
 ```
 hylla home
 ```
