@@ -80,7 +80,7 @@ def new(config, name, tags, readme_template, commands, clone):
     # check if the project exists already and if that is the case exit.
     if project_exists(project_name, project_dir, config):
         click.secho('Error! Project name is already used', bg='red', fg='white')
-        exit()
+        sys.exit(0)
 
     # open the notepad if the user used the flag --commands
     if commands:
@@ -134,7 +134,7 @@ def open_project(config, name, safe):
     # does the project exist
     if not project:
         click.secho('Error! A project with that name does not exist', bg='red', fg='white')
-        exit()
+        sys.exit(0)
 
     # Should perhaps parse the data to a Project object instead.
     # Check if the folder exists
@@ -184,16 +184,19 @@ def remove(config, name):
             click.echo('OK, the project was not removed!')
     else:
         click.secho('Error! A project with that name does not exist', bg='red', fg='white')
-        exit()
+        sys.exit(0)
 
 
 # 'List' command:
 @cli.command('list')
-@click.argument('tag')
+@click.option('--tag')
 @pass_config
 def list(config, tag):
     """List your projects"""
-    config.c.execute("SELECT * FROM projects")
+    if tag:
+        click.echo('implement later!')
+    else:
+        config.c.execute("SELECT * FROM projects")
     for project in format_projects(config.c.fetchall()):
         click.echo(project)
 
