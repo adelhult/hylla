@@ -15,7 +15,7 @@ class Project:
         self.date = date
         self.id = id
     def __repr__(self):
-        return self.name
+        return f'{self.name}   tags:{self.tags_str}'
 
 # an object used to send config data to every command
 class Config(object):
@@ -189,11 +189,14 @@ def remove(config, name):
 
 # 'List' command:
 @cli.command('list')
+@click.argument('tag')
 @pass_config
-def list(config):
+def list(config, tag):
     """List your projects"""
-    for project in fetch_all_projects(config):
-        print(project.name, project.tags_str)
+    config.c.execute("SELECT * FROM projects")
+    for project in format_projects(config.c.fetchall()):
+        click.echo(project)
+
 
 # Function used to create the readme file
 def create_readme(template_path, project_dir, project_name):
@@ -240,9 +243,12 @@ def add_to_database(name, dir, tags, config, code):
             (name, dir, tags_string, code, date))
 
 def fetch_all_projects(config):
-    projects = []
     config.c.execute("SELECT * FROM projects")
-    for p in config.c.fetchall():
+    return format_projects(config.c.fetchall())
+
+def format_projects(data):
+    projects = []
+    for p in data:
         projects.append(Project(p[0],
                                 p[1],
                                 p[2],
@@ -250,6 +256,7 @@ def fetch_all_projects(config):
                                 p[4],
                                 p[5]))
     return projects
+
 
 if __name__ == '__main__':
     cli()
