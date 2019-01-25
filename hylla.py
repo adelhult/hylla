@@ -159,12 +159,15 @@ def open_project(config, name, safe):
 
 # 'Edit' command:
 @cli.command('edit')
-@click.argument('current_name')
-def edit(current_name):
+@click.argument('name')
+@pass_config
+def edit(config, name):
     """Edit or delete a project"""
-    # WRITE THIS LATER!!!
-    click.echo('This command is yet to be implemented')
-    #new_name = click.prompt('Updated name', default=current_name, type=str, show_default=True)
+    click.echo('NOTE: Support to edit project names will be added later.')
+    config.c.execute("SELECT * FROM projects WHERE name=:name", {'name':name})
+    old_commands = config.c.fetchone()[3]
+    new_commands = click.edit(old_commands, require_save = False)
+    click.echo('This is not done yet!')
     # Important to allow the user to change the 'code' data!
 
 
@@ -205,7 +208,7 @@ def list(config, tag, detailed):
     if len(query_results) <= 0:
         click.echo('No projects where found! :(')
         sys.exit(0)
-        
+
     # If there were results print them all out
     for p in format_projects(query_results):
         if detailed:
