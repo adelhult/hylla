@@ -190,15 +190,23 @@ def remove(config, name):
 # 'List' command:
 @cli.command('list')
 @click.option('--tag')
+@click.option('--detailed', is_flag=True)
 @pass_config
-def list(config, tag):
+def list(config, tag, detailed):
     """List your projects"""
     if tag:
         click.echo('implement later!')
     else:
         config.c.execute("SELECT * FROM projects")
-    for project in format_projects(config.c.fetchall()):
-        click.echo(project)
+    for p in format_projects(config.c.fetchall()):
+        if detailed:
+            code = p.code[:24] + '...'
+            click.secho(f'#{p.id}  {p.name}  {p.date}', bg='white', fg='black')
+            click.echo(f'   tags: {p.tags_str}')
+            click.echo(f'   path: {p.dir}')
+            click.echo(f'   commands: {code}')
+        else:
+            click.echo(p)
 
 
 # Function used to create the readme file
