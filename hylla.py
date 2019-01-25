@@ -1,4 +1,5 @@
 import os
+import sys
 import shutil
 import datetime
 import sqlite3
@@ -195,10 +196,18 @@ def remove(config, name):
 def list(config, tag, detailed):
     """List your projects"""
     if tag:
-        click.echo('implement later!')
+        config.c.execute("select * from projects where tags like ?", (f'%{tag}%',))
     else:
         config.c.execute("SELECT * FROM projects")
-    for p in format_projects(config.c.fetchall()):
+    query_results = config.c.fetchall()
+
+    # If no results, print message and exit program
+    if len(query_results) <= 0:
+        click.echo('No projects where found! :(')
+        sys.exit(0)
+        
+    # If there were results print them all out
+    for p in format_projects(query_results):
         if detailed:
             code = p.code[:24] + '...'
             click.secho(f'#{p.id}  {p.name}  {p.date}', bg='white', fg='black')
