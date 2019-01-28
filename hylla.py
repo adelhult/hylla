@@ -213,7 +213,7 @@ def list(config, tag, detailed):
     for p in format_projects(query_results):
         if detailed:
             code = p.code[:24] + '...'
-            click.secho(f'#{p.id}  {p.name}  {p.date}', bg='white', fg='black')
+            click.secho(f'#{p.id}  {p.name}  {p.date}', bg='cyan', fg='white')
             click.echo(f'   tags: {p.tags_str}')
             click.echo(f'   path: {p.dir}')
             click.echo(f'   commands: {code}')
