@@ -16,7 +16,13 @@ class Project:
         self.date = date
         self.id = id
     def __repr__(self):
-        return f'{self.name}   tags:{self.tags_str}'
+        # logic to display even long names in a pretty way
+        if len(self.name) <= 7:
+            return f'{self.name}\t\ttags:{self.tags_str}'
+        elif len(self.name) > 15:
+            return f'{self.name[:13]}..\ttags:{self.tags_str}'
+        else:
+            return f'{self.name}\ttags:{self.tags_str}'
 
 # an object used to send config data to every command
 class Config(object):
@@ -214,9 +220,9 @@ def list(config, tag, detailed):
         if detailed:
             code = p.code[:24] + '...'
             click.secho(f'#{p.id}  {p.name}  {p.date}', bg='cyan', fg='white')
-            click.echo(f'   tags: {p.tags_str}')
-            click.echo(f'   path: {p.dir}')
-            click.echo(f'   commands: {code}')
+            click.echo(f'\ttags: {p.tags_str}')
+            click.echo(f'\tpath: {p.dir}')
+            click.echo(f'\tcommands: {code}')
         else:
             click.echo(p)
 
