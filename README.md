@@ -65,7 +65,7 @@ hylla list
 ```
 **Options:**
 
-```--tag```
+```--tag TEXT```
 List projects containing a specific subject tag.
 
 ```--detailed```
