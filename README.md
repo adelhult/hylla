@@ -63,7 +63,7 @@ Prints help information about the 'open' command.
 ```
 hylla list
 ```
-
+**Options:**
 ```--tag```
 List projects containing a specific subject tag.
 
