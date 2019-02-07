@@ -74,17 +74,19 @@ def open_docs():
 @click.argument('name')
 @click.argument('tags', nargs=-1)
 @click.option('--readme-template',
-             envvar='HYLLA_README_TEMPLATE',
-             type=click.Path(exists=True, dir_okay=False))
+            envvar='HYLLA_README_TEMPLATE',
+            type=click.Path(exists=True, dir_okay=False))
 @click.option('--commands', is_flag=True)
 @click.option('--clone', is_flag=True)
+@click.option('--migrate',
+            type=click.Path(exists=True, dir_okay=True, file_okay=False))
 @pass_config
-def new(config, name, tags, readme_template, commands, clone):
+def new(config, name, tags, readme_template, commands, clone, migrate):
     """Create a new project"""
     # define vars project_name and project_dir
     project_name, project_dir = parse_project_data(name, config)
 
-    # check if the project exists already and if that is the case exit.
+    # check if the project exists already and if that is the case, exit.
     if project_exists(project_name, project_dir, config):
         click.secho('Error! Project name is already used', bg='red', fg='white')
         sys.exit(0)
@@ -111,9 +113,17 @@ def new(config, name, tags, readme_template, commands, clone):
     click.echo(f'Project name: {project_name}')
     click.echo(f'Tags: {tags}')
 
-    #Create folder!
-    os.mkdir(project_dir)
-    click.echo('Project directory created!')
+    # Migrate files to a new folder if the user used the migrate option, then exit.
+    if migrate:
+        print(f'All the files from {migrate} will be migrated to the new dir')
+        # the copytree function creates a new
+        shutil.copytree(migrate, project_dir)
+        exit(0)
+    else:
+        # Create a project folder, if they did not the migrate function!
+        os.mkdir(project_dir)
+        click.echo('Project directory created!')
+
     # Create a readme file in the directory
     if clone:
         url = click.prompt('Git URL')
@@ -122,7 +132,7 @@ def new(config, name, tags, readme_template, commands, clone):
         os.chdir(project_dir)
         os.system(f'git clone {url} .')
         click.echo(f'Project directory cloned from {url}!')
-
+        
     # If the user choose not to clone a readme is created.
     else:
         create_readme(readme_template, project_dir, project_name)
@@ -226,6 +236,13 @@ def list(config, tag, detailed):
         else:
             click.echo(p)
 
+@cli.command('home')
+@pass_config
+def home(config):
+    """ Open the dir with all the projects"""
+    print(config.location)
+    click.launch(config.location, locate=False)
+
 
 # Function used to create the readme file
 def create_readme(template_path, project_dir, project_name):
@@ -242,14 +259,6 @@ def create_readme(template_path, project_dir, project_name):
             click.echo('Created a standard README file')
     else:
         click.echo('A README does already exist in the folder')
-
-
-@cli.command('home')
-@pass_config
-def home(config):
-    """ Open the dir with all the projects"""
-    print(config.location)
-    click.launch(config.location, locate=False)
 
 def parse_project_data(name, config):
     project_name = name.strip().lower().replace(' ', '_')
@@ -285,7 +294,6 @@ def format_projects(data):
                                 p[4],
                                 p[5]))
     return projects
-
 
 if __name__ == '__main__':
     cli()
