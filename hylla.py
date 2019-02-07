@@ -100,7 +100,7 @@ def new(config, name, tags, readme_template, commands, clone):
             code = click.edit(MARKER).split(MARKER, 1)[0]
     else:
         if os.name == 'nt':
-            code = f'start "Hylla - {project_name}" /D {project_dir} \n'
+            code = 'start "Hylla - {project_name}" /D . \n'
         else:
             code = ''
 
