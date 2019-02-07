@@ -63,7 +63,15 @@ Prints help information about the 'open' command.
 ```
 hylla list
 ```
-This function will be more advanced in a future version, making it possible to search for projects based upon tag(s) and possibly date.
+
+```--tag```
+List projects containing a specific subject tag.
+
+```--detailed```
+List more information about each project
+
+```--help```
+Prints help information about the 'list' command.
 
 ### Open Github page
 ```
