@@ -94,7 +94,7 @@ def new(config, name, tags, readme_template, commands, clone):
         MARKER = '# Everything above this line is executed when \'hylla open\' is used.'
         # If on windows, add a command to open a new cmd in the workin dir
         if os.name == 'nt':
-            open_cmd_code = f'start "Hylla - {project_name}" /D {project_dir} \n'
+            open_cmd_code = 'start "Hylla - {project_name}" /D . \n'
             code = click.edit(open_cmd_code + MARKER, require_save = False).split(MARKER, 1)[0]
         else:
             code = click.edit(MARKER).split(MARKER, 1)[0]
