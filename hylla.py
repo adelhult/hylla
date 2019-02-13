@@ -132,7 +132,7 @@ def new(config, name, tags, readme_template, commands, clone, migrate):
         os.chdir(project_dir)
         os.system(f'git clone {url} .')
         click.echo(f'Project directory cloned from {url}!')
-        
+
     # If the user choose not to clone a readme is created.
     else:
         create_readme(readme_template, project_dir, project_name)
@@ -148,7 +148,8 @@ def open_project(config, name, safe):
     config.c.execute("SELECT * FROM projects WHERE name=:name", {'name':name})
     project = config.c.fetchone()
 
-    # does the project exist
+    # Maybe a file browser with the project should be opened
+    # does the project exist?
     if not project:
         click.secho('Error! A project with that name does not exist', bg='red', fg='white')
         sys.exit(0)
@@ -235,6 +236,7 @@ def list(config, tag, detailed):
             click.echo(f'\tcommands: {code}')
         else:
             click.echo(p)
+
 
 @cli.command('home')
 @pass_config
