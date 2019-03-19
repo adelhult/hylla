@@ -41,7 +41,7 @@ pass_config = click.make_pass_decorator(Config, ensure=True)
               type=click.Path(exists=True, file_okay=False))
 @pass_config
 def cli(config, location):
-    """Hylla. Organize all your projects from the command-line"""
+    """Hylla - Organize all your projects from the command-line"""
     config.location = location
     # Database connection and vars
     conn = sqlite3.connect(os.path.join(location, 'hylla_database.db'))
@@ -80,8 +80,9 @@ def open_docs():
 @click.option('--clone', is_flag=True)
 @click.option('--migrate',
             type=click.Path(exists=True, dir_okay=True, file_okay=False))
+@click.option('--no-readme', is_flag=True)
 @pass_config
-def new(config, name, tags, readme_template, commands, clone, migrate):
+def new(config, name, tags, readme_template, commands, clone, migrate, no_readme):
     """Create a new project"""
     # define vars project_name and project_dir
     project_name, project_dir = parse_project_data(name, config)
@@ -134,7 +135,7 @@ def new(config, name, tags, readme_template, commands, clone, migrate):
         click.echo(f'Project directory cloned from {url}!')
 
     # If the user choose not to clone a readme is created.
-    else:
+    elif not no_readme:
         create_readme(readme_template, project_dir, project_name)
 
 
@@ -243,9 +244,9 @@ def remove(config, name):
 def list(config, tag, detailed):
     """List and search for projects"""
     if tag:
-        config.c.execute("select * from projects where tags like ?", (f'%{tag}%',))
+        config.c.execute("SELECT * FROM projects WHERE tags LIKE ? ORDER BY name COLLATE NOCASE ASC", (f'%{tag}%',))
     else:
-        config.c.execute("SELECT * FROM projects")
+        config.c.execute("SELECT * FROM projects ORDER BY name COLLATE NOCASE ASC")
     query_results = config.c.fetchall()
 
     # If no results, print message and exit program
