@@ -176,17 +176,30 @@ def open_project(config, name, safe):
 
 # 'Edit' command:
 @cli.command('edit')
+@click.argument('variable', type=click.Choice(['name', 'tags', 'commands']))
 @click.argument('name')
 @pass_config
-def edit(config, name):
-    """Edit or delete a project"""
-    click.echo('NOTE: Support to edit project names will be added later.')
-    config.c.execute("SELECT * FROM projects WHERE name=:name", {'name':name})
-    old_commands = config.c.fetchone()[3]
-    new_commands = click.edit(old_commands, require_save = False)
-    click.echo('This is not done yet!')
-    # Important to allow the user to change the 'code' data!
+def edit(config, variable, name):
+    """Edit a project"""
 
+    #Look for data in the database
+    config.c.execute("SELECT * FROM projects WHERE name=:name", {'name':name})
+    collected_data = config.c.fetchone()
+    #Check if such a project does exist, if not close the program.
+    if not collected_data:
+        click.echo("No project with that name exists!")
+        exit(0)
+
+    # Format the data using the format_projects function which creates an object
+    # Note, format_projects needs a list.
+    project = format_projects([collected_data])[0]
+
+    if variable == "name":
+        click.echo("The option to change names is yet to be implemented!")
+    elif variable == "tags":
+        click.echo("TAGS!")
+    #new_commands = click.edit(old_commands, require_save = False)
+    # Important to allow the user to change the 'code' data!
 
 # 'Remove' command:
 @cli.command('remove')
