@@ -185,6 +185,7 @@ def edit(config, variable, name):
     #Look for data in the database
     config.c.execute("SELECT * FROM projects WHERE name=:name", {'name':name})
     collected_data = config.c.fetchone()
+
     #Check if such a project does exist, if not close the program.
     if not collected_data:
         click.echo("No project with that name exists!")
@@ -194,12 +195,25 @@ def edit(config, variable, name):
     # Note, format_projects needs a list.
     project = format_projects([collected_data])[0]
 
-    if variable == "name":
-        click.echo("The option to change names is yet to be implemented!")
-    elif variable == "tags":
-        click.echo("TAGS!")
-    #new_commands = click.edit(old_commands, require_save = False)
-    # Important to allow the user to change the 'code' data!
+    if variable == 'name':
+        click.echo("WIP")
+
+    if variable == 'code':
+        click.echo("WIP")
+
+    elif variable == 'tags':
+        click.echo(f'Current tags for "{project.name}": {project.tags}')
+        click.echo('Write a list (seperated with commas followed by blank spaces) ' \
+        'of all the tags that should be associated with the project.')
+        new_tags = click.prompt('Input tags')
+        if click.confirm(f'Do you really want to update the tags for "{project.name}"'):
+            with config.conn:
+                config.c.execute("UPDATE projects SET tags = ? WHERE name = ? ",
+                (new_tags, name))
+            click.echo('The changes has been made!')
+        else:
+            click.echo('No changes has been made!')
+            exit(0)
 
 # 'Remove' command:
 @cli.command('remove')
@@ -209,7 +223,7 @@ def remove(config, name):
     """Remove a project from the database"""
     config.c.execute("SELECT * FROM projects WHERE name=:name", {'name':name})
     if config.c.fetchone():
-        if click.confirm(f'Are you sure you want to remove the {name}'):
+        if click.confirm(f'Are you sure you want to remove "{name}"'):
             with config.conn:
                 config.c.execute('DELETE FROM projects WHERE name=:name', {'name':name})
                 click.secho('The project has now been removed from the database!', bg='red', fg='white')
@@ -227,7 +241,7 @@ def remove(config, name):
 @click.option('--detailed', is_flag=True)
 @pass_config
 def list(config, tag, detailed):
-    """List your projects"""
+    """List and search for projects"""
     if tag:
         config.c.execute("select * from projects where tags like ?", (f'%{tag}%',))
     else:
