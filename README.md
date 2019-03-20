@@ -39,9 +39,15 @@ Allows the user to write a list of commands that will be executed every time the
 ```--clone```
 The user will later be prompted to enter the URL to a repository to git clone from.
 
+```--migrate DIRECTORY```
+Copies all the files from an existing directory.
+
 ```--readme-template FILE```
 Specify a template which will be used to create the project README.md, 
 the environmental variable HYLLA_README_TEMPLATE can also be used.
+
+```--no-readme```
+If the flag is added no README will be generated.
 
 ```--help```
 Prints help information about the 'new' command.
@@ -83,8 +89,11 @@ Will open this page in a web browser.
 ### Edit a project
 Work in progress
 
-### Delete a project
-Work in progress
+### Remove a project
+```
+hylla remove NAME
+```
+Removes the project from Hylla's database. However, no files are deleted.
 
 
 ### Open the directory where all the projects are stored
