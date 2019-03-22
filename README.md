@@ -17,7 +17,7 @@
 
 * List all projects and search for them with subject tags.
 
-* Launch custom scripts and start software every time a project is opened. 
+* Launch custom scripts and start software every time a project is opened.
 
 
 ## :computer: Usage
@@ -36,6 +36,9 @@ hylla new [OPTIONS] NAME [TAGS] ...
 ```--commands```
 Allows the user to write a list of commands that will be executed every time the project is opened.
 
+```--github USER REPOSITORY_NAME```
+Clone directly from a github repository. (Note, Hylla will list all repos from the github user if the inputed name was incorrect.)
+
 ```--clone```
 The user will later be prompted to enter the URL to a repository to git clone from.
 
@@ -43,7 +46,7 @@ The user will later be prompted to enter the URL to a repository to git clone fr
 Copies all the files from an existing directory.
 
 ```--readme-template FILE```
-Specify a template which will be used to create the project README.md, 
+Specify a template which will be used to create the project README.md,
 the environmental variable HYLLA_README_TEMPLATE can also be used.
 
 ```--no-readme```
@@ -51,17 +54,17 @@ If the flag is added no README will be generated.
 
 ```--help```
 Prints help information about the 'new' command.
-	
+
  ### Open a project
-Prints the project path and executes all the commands that the user has specified. 
+Prints the project path and executes all the commands that the user has specified.
 ```
 hylla open [OPTIONS] NAME
 ```
 **Options:**
-	
+
 ```--safe```
 If the safe flag is added, no commands will be executed.
-	
+
 ```--help```
 Prints help information about the 'open' command.
 
@@ -84,7 +87,7 @@ Prints help information about the 'list' command.
 ```
 hylla docs
 ```
-Will open this page in a web browser. 
+Will open this page in a web browser.
 
 ### Edit a project
 Work in progress
