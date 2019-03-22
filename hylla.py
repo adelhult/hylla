@@ -2,8 +2,10 @@ import os
 import sys
 import shutil
 import datetime
+from json import loads
 import sqlite3
 import click
+import requests
 
 # class used when displaying projects (might be a bit unecessary)
 class Project:
@@ -78,12 +80,14 @@ def open_docs():
             type=click.Path(exists=True, dir_okay=False))
 @click.option('--commands', is_flag=True)
 @click.option('--clone', is_flag=True)
+@click.option('--github', nargs=2)
 @click.option('--migrate',
             type=click.Path(exists=True, dir_okay=True, file_okay=False))
 @click.option('--no-readme', is_flag=True)
 @pass_config
-def new(config, name, tags, readme_template, commands, clone, migrate, no_readme):
+def new(config, name, tags, readme_template, commands, clone, github, migrate, no_readme):
     """Create a new project"""
+    clone_url = False
     # define vars project_name and project_dir
     project_name, project_dir = parse_project_data(name, config)
 
@@ -109,6 +113,7 @@ def new(config, name, tags, readme_template, commands, clone, migrate, no_readme
 
     # Add to database
     add_to_database(project_name, project_dir, tags, config, code)
+    click.secho('Project added to the database', bg='green', fg='black')
 
     # print info
     click.echo(f'Project name: {project_name}')
@@ -125,16 +130,68 @@ def new(config, name, tags, readme_template, commands, clone, migrate, no_readme
         os.mkdir(project_dir)
         click.echo('Project directory created!')
 
-    # Create a readme file in the directory
-    if clone:
-        url = click.prompt('Git URL')
-        # would be good to check if the input is valid.
-        # and check if git exists in the path as well!
-        os.chdir(project_dir)
-        os.system(f'git clone {url} .')
-        click.echo(f'Project directory cloned from {url}!')
+    # Logic for cloning from github or with the --clone command.
+    if github:
+        github_repos = f'https://api.github.com/users/{github[0]}/repos'
+        # Try to get data from github
+        try:
+            r = requests.get(github_repos)
+        except requests.exceptions.RequestException as e:
+            print(e)
+            sys.exit(1)
 
-    # If the user choose not to clone a readme is created.
+        # reading json data
+        data = loads(r.text)
+        repo_name = github[1]
+
+        # Create a list with the names of all the repos.
+        user_repos = []
+        for repo in data:
+            try:
+                user_repos.append(repo['name'])
+            except TypeError:
+                # Failed to load data from user
+                click.secho(f'Failed to load repository data for user "{github[0]}"',
+                bg='red', fg='white')
+                exit(0)
+
+        while True:
+            # Was a valid repo picked?
+            if repo_name in user_repos:
+                # find the clone_url.
+                for repo in data:
+                    if repo_name == repo['name']:
+                        clone_url = repo['clone_url']
+                        break
+                break
+
+            # if no repo with that named exists in the list
+            else:
+                # Alert the user!
+                click.secho(f'{github[0]} has no repo named "{repo_name}"!', bg='red', fg='white')
+
+                # Ask if they want to try again
+                if not click.confirm('Would you like to choose from the existing repositories? ' \
+                '(the attempt to clone will otherwise be aborted)'):
+                    exit() # If the user said no, exit. otherwise move on:
+
+                # The user chose to continue...
+                # list all the repos:
+                click.echo(f'Listing all repos belonging to {github[0]}')
+                for name in user_repos:
+                    click.echo(name)
+                repo_name = click.prompt('Enter name')
+
+    elif clone:
+        clone_url = click.prompt('Git URL')
+
+    # If a clone_url was specified in the code above, try to git clone.
+    if clone_url:
+        os.chdir(project_dir)
+        os.system(f'git clone {clone_url} .')
+        click.echo(f'Project directory cloned from {clone_url}!')
+    # If the user choose not to clone a readme is created
+    #(unless the user used the no_readme flag)
     elif not no_readme:
         create_readme(readme_template, project_dir, project_name)
 
