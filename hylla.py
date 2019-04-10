@@ -347,7 +347,7 @@ def home(config):
 
 # Function used to create the readme file
 def create_readme(template_path, project_dir, project_name):
-    """Check if a readme exists, and if not creates one."""
+    """Checks if a readme exists, and if not create one."""
     file_path = os.path.join(project_dir, 'README.md')
     if not os.path.isfile(file_path):
         if template_path:
@@ -363,7 +363,7 @@ def create_readme(template_path, project_dir, project_name):
         click.echo('A README does already exist in the folder')
 
 def parse_project_data(name, config):
-    """returnes a correct project name and directory path."""
+    """Takes inputed name returnes a correct project name and directory path."""
     project_name = name.strip().lower().replace(' ', '_')
     project_dir = os.path.join(config.location, project_name)
     return project_name, project_dir
@@ -371,7 +371,7 @@ def parse_project_data(name, config):
 
 # Determines if a project dir exits or if it is used in the database
 def project_exists(name, dir, config):
-    """Check if a project or directory with that name exists."""
+    """Checks if a project or directory with that name exists."""
     config.c.execute("SELECT * FROM projects WHERE name=:name", {'name':name})
     if os.path.exists(dir) or config.c.fetchone():
         return True
@@ -381,7 +381,7 @@ def project_exists(name, dir, config):
 
 # Should maybe take an instance of the Project as an argument instead.
 def add_to_database(name, dir, tags, config, code):
-    """Take complete project info and add it to the database."""
+    """Takes complete project info and adds it to the database."""
     date = str(datetime.date.today())
     tags_string = ', '.join(str(e) for e in tags)
     with config.conn:
@@ -390,13 +390,13 @@ def add_to_database(name, dir, tags, config, code):
 
 
 def fetch_all_projects(config):
-    """Fetch projects from the database and return a list"""
+    """Fetches projects from the database and return a list"""
     config.c.execute("SELECT * FROM projects")
     return format_projects(config.c.fetchall())
 
 
 def format_projects(data):
-    """Format data and return a list of project object"""
+    """Format projects and return a list of """
     projects = []
     for p in data:
         projects.append(Project(p[0],
