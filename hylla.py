@@ -7,7 +7,7 @@ import sqlite3
 import click
 import requests
 
-# class used when displaying projects (might be a bit unecessary)
+
 class Project:
     def __init__(self, name, path, tags, code, date, id):
         self.name = name
@@ -17,6 +17,7 @@ class Project:
         self.code = code
         self.date = date
         self.id = id
+
     def __repr__(self):
         # logic to display even long names in a pretty way
         if len(self.name) <= 7:
@@ -25,6 +26,7 @@ class Project:
             return f'{self.name[:13]}..\ttags:{self.tags_str}'
         else:
             return f'{self.name}\ttags:{self.tags_str}'
+
 
 # an object used to send config data to every command
 class Config(object):
@@ -62,6 +64,7 @@ def cli(config, location):
                             date text,
                             id integer primary key
         )""")
+
 
 # 'Docs' command, used to open the docs/github in a browser window
 @cli.command('docs')
@@ -273,6 +276,7 @@ def edit(config, variable, name):
             click.echo('No changes has been made!')
             exit(0)
 
+
 # 'Remove' command:
 @cli.command('remove')
 @click.argument('name')
@@ -329,7 +333,6 @@ def home(config):
     """ Open the dir with all the projects"""
     print(config.location)
     click.launch(config.location, locate=False)
-
 
 # Function used to create the readme file
 def create_readme(template_path, project_dir, project_name):
