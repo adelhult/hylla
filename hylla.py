@@ -6,7 +6,7 @@ If Hylla is used without specifying a command, help information will be printed.
 Complete documentation can also be found on https://github.com/adelhult/hylla or
 by using the command 'hylla docs'.
 
-Hylla is created by Eli Adelhult and licensed under the MIT license.
+Hylla is a project by Eli Adelhult and is licensed under the MIT license.
 """
 
 import os
