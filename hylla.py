@@ -1,4 +1,4 @@
-"""Hylla - Organize all your projects from the command-line
+"""Hylla. Organize all your projects from the command-line.
 
 Usage:
 hylla [OPTIONS] COMMAND [ARGS]
@@ -115,7 +115,7 @@ def new(config, name, tags, readme_template, commands, clone, github, migrate, n
         MARKER = '# Everything above this line is executed when \'hylla open\' is used.'
         # If on windows, add a command to open a new cmd in the workin dir
         if os.name == 'nt':
-            open_cmd_code = 'start "Hylla - {project_name}" /D . \n'
+            open_cmd_code = f'start "Hylla - {project_name}" /D . \n'
             code = click.edit(open_cmd_code + MARKER, require_save = False).split(MARKER, 1)[0]
         else:
             code = click.edit(MARKER).split(MARKER, 1)[0]
@@ -273,6 +273,7 @@ def edit(config, variable, name):
     if variable == 'code':
         click.echo("WIP")
 
+    # Update tags
     elif variable == 'tags':
         click.echo(f'Current tags for "{project.name}": {project.tags}')
         click.echo('Write a list (seperated with commas followed by blank spaces) ' \
@@ -345,6 +346,7 @@ def home(config):
     print(config.location)
     click.launch(config.location, locate=False)
 
+
 # Function used to create the readme file
 def create_readme(template_path, project_dir, project_name):
     """Check if a readme exists, and if not create one."""
@@ -361,6 +363,7 @@ def create_readme(template_path, project_dir, project_name):
             click.echo('Created a standard README file')
     else:
         click.echo('A README does already exist in the folder')
+
 
 def parse_project_data(name, config):
     """Return project name and directory path."""
