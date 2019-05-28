@@ -12,7 +12,6 @@ Hylla is a project by Eli Adelhult and is licensed under the MIT license.
 # todo:
 # add a remove and edit method to the Project class
 # create the function commands(code)
-# fix the edit function
 # add help attributes to the click options and arguments
 
 
@@ -256,7 +255,7 @@ def open_project(config, name, safe):
 @click.argument('alternative', type=click.Choice(['name', 'tags', 'commands']))
 @click.argument('name')
 @pass_config
-def edit(config, alternative, name):
+def edit(config, name, alternative):
     """Edit a project"""
 
     #Look for data in the database
