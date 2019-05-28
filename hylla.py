@@ -253,10 +253,10 @@ def open_project(config, name, safe):
 
 # 'Edit' command:
 @cli.command('edit')
-@click.argument('variable', type=click.Choice(['name', 'tags', 'commands']))
+@click.argument('alternative', type=click.Choice(['name', 'tags', 'commands']))
 @click.argument('name')
 @pass_config
-def edit(config, variable, name):
+def edit(config, alternative, name):
     """Edit a project"""
 
     #Look for data in the database
@@ -272,17 +272,36 @@ def edit(config, variable, name):
     # Note, format_projects needs a list.
     project = format_projects([collected_data])[0]
 
-    if variable == 'name':
-        pass
-    if variable == 'commands':
+    if alternative == 'name':
+        user_input = click.prompt('Input a new name').strip()
+        new_name, new_dir = parse_project_data(user_input, config)
+
+        if project_exists(new_name, new_dir,config):
+            click.echo('That project name is already used!')
+            exit(0)
+
+        if click.confirm(f'Do you really want to confirm this update?'):
+            with config.conn:
+                config.c.execute("UPDATE projects SET name = ? WHERE name = ? ",
+                (new_name, project.name))
+                config.c.execute("UPDATE projects SET path = ? WHERE name = ? ",
+                (new_dir, new_name))
+            os.rename(project.dir, new_dir)
+            click.echo('The changes has been made!')
+
+    elif alternative == 'commands':
         code = click.edit(project.code)
         if click.confirm(f'Do you really want to confirm this update?'):
             with config.conn:
                 config.c.execute("UPDATE projects SET code = ? WHERE name = ? ",
-                (code, name))
+                (code, project.name))
+            click.echo('The changes has been made!')
+        else:
+            click.echo('Ok. No changes has been made!')
+            exit(0)
 
     # Update tags
-    elif variable == 'tags':
+    elif alternative == 'tags':
         click.echo(f'Current tags for "{project.name}": {project.tags}')
         click.echo('Write a list (seperated with commas followed by blank spaces) ' \
         'of all the tags that should be associated with the project.')
@@ -293,7 +312,7 @@ def edit(config, variable, name):
                 (new_tags, name))
             click.echo('The changes has been made!')
         else:
-            click.echo('No changes has been made!')
+            click.echo('Ok. No changes has been made!')
             exit(0)
 
 
@@ -386,8 +405,7 @@ def project_exists(name, dir, config):
     config.c.execute("SELECT * FROM projects WHERE name=:name", {'name':name})
     if os.path.exists(dir) or config.c.fetchone():
         return True
-    else:
-        return False
+    return False
 
 
 # Should maybe take an instance of the Project as an argument instead.
