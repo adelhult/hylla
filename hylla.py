@@ -50,11 +50,9 @@ class Project:
         if not safe:
             commands = self.code.split('\n')
             os.chdir(self.dir)
-            click.echo('Executing the following commands:')
             for command in commands:
                 # Remove comments before executing the commands
                 if command.strip().find('#') != 0:
-                    click.echo(command)
                     os.system(command)
         else:
             click.echo('Safe mode is active and no commands are therefor executed')
