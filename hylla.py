@@ -252,8 +252,8 @@ def open_project(config, name, safe):
 
 # 'Edit' command:
 @cli.command('edit')
-@click.argument('alternative', type=click.Choice(['name', 'tags', 'commands']))
 @click.argument('name')
+@click.argument('alternative', type=click.Choice(['name', 'tags', 'commands']))
 @pass_config
 def edit(config, name, alternative):
     """Edit a project"""
