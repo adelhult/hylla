@@ -36,7 +36,7 @@ class Project:
         self.date = date
         self.id = id
 
-    def open(self, safe=False):
+    def open(self, safe):
         """Open a project"""
 
         if not os.path.exists(self.dir):
@@ -51,7 +51,7 @@ class Project:
         if not safe:
             commands = self.code.split('\n')
             os.chdir(self.dir)
-            click.echo('executing commands')
+            click.echo('Executing the following commands:')
             for command in commands:
                 # Remove comments before executing the commands
                 if command.strip().find('#') != 0:
@@ -143,7 +143,8 @@ def new(config, name, tags, readme_template, commands, clone, github, migrate, n
 
     # open the notepad if the user used the flag --commands
     if commands:
-            code = click.edit()
+            INSTRUCTIONS = '# All the commands executed when a project is opened'
+            code = click.edit(INSTRUCTIONS)
     else:
         code = ''
 
@@ -247,7 +248,7 @@ def open_project(config, name, safe):
         sys.exit(0)
     project = format_projects([data])[0]
     print(project)
-    project.open()
+    project.open(safe)
 
 
 # 'Edit' command:
@@ -272,10 +273,13 @@ def edit(config, variable, name):
     project = format_projects([collected_data])[0]
 
     if variable == 'name':
-        click.echo("WIP")
-
-    if variable == 'code':
-        click.echo("WIP")
+        pass
+    if variable == 'commands':
+        code = click.edit(project.code)
+        if click.confirm(f'Do you really want to confirm this update?'):
+            with config.conn:
+                config.c.execute("UPDATE projects SET code = ? WHERE name = ? ",
+                (code, name))
 
     # Update tags
     elif variable == 'tags':
