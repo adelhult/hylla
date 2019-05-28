@@ -36,6 +36,26 @@ class Project:
         self.date = date
         self.id = id
 
+    def open(self, safe=False):
+        """Open a project"""
+
+        if not os.path.exists(self.dir):
+            click.secho('Error! The project directory is missing', bg='red', fg='white')
+            click.secho('Creating a new one!', bg='green', fg='white')
+            os.mkdir(self.dir)
+
+        click.echo('Project directory:')
+        click.echo(self.dir)
+        click.launch(self.dir)
+
+        if not safe:
+            commands = self.code.split('\n')
+            os.chdir(self.dir)
+            for command in commands:
+                os.system(command)
+        else:
+            click.echo('Safe mode is active and no commands are therefor executed')
+
     def __repr__(self):
         # logic to display even long names in a pretty way
         if len(self.name) <= 7:
@@ -225,32 +245,14 @@ def new(config, name, tags, readme_template, commands, clone, github, migrate, n
 def open_project(config, name, safe):
     """Open a project"""
     config.c.execute("SELECT * FROM projects WHERE name=:name", {'name':name})
-    project = config.c.fetchone()
-
-    # Maybe a file browser with the project should be opened
-    # does the project exist?
-    if not project:
-        click.secho('Error! A project with that name does not exist', bg='red', fg='white')
+    data = config.c.fetchone()
+    if not data:
+        click.secho('Error! A project with that name does not exist',
+                    bg='red', fg='white')
         sys.exit(0)
-
-    # Should perhaps parse the data to a Project object instead.
-    # Check if the folder exists
-    dir = project[1]
-    if not os.path.exists(dir):
-        click.secho('Error! The project directory is missing', bg='red', fg='white')
-        click.secho('Creating a new one!', bg='green', fg='white')
-        os.mkdir(dir)
-
-    click.echo('Project directory:')
-    click.echo(dir)
-
-    if not safe:
-        commands = project[3].split('\n')
-        os.chdir(dir)
-        for command in commands:
-            os.system(command)
-    else:
-        click.echo('Safe mode is active and no commands are therefor executed')
+    project = format_projects([data])[0]
+    print(project)
+    project.open()
 
 
 # 'Edit' command:
