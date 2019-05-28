@@ -4,7 +4,6 @@
   	<br>
   	<p>
     		<i>
-			<b>A command-line tool to organize your projects.</b><br/>
       			Hylla is Swedish, meaning both 'shelf' and 'honour'.<br/>
       			So, honour your projects by neatly organizing them on a digital shelf using simple commands.
     		</i>
