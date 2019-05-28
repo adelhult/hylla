@@ -51,8 +51,12 @@ class Project:
         if not safe:
             commands = self.code.split('\n')
             os.chdir(self.dir)
+            click.echo('executing commands')
             for command in commands:
-                os.system(command)
+                # Remove comments before executing the commands
+                if command.strip().find('#') != 0:
+                    click.echo(command)
+                    os.system(command)
         else:
             click.echo('Safe mode is active and no commands are therefor executed')
 
@@ -139,18 +143,9 @@ def new(config, name, tags, readme_template, commands, clone, github, migrate, n
 
     # open the notepad if the user used the flag --commands
     if commands:
-        MARKER = '# Everything above this line is executed when \'hylla open\' is used.'
-        # If on windows, add a command to open a new cmd in the workin dir
-        if os.name == 'nt':
-            open_cmd_code = f'start "Hylla" /D . \n'
-            code = click.edit(open_cmd_code + MARKER, require_save = False).split(MARKER, 1)[0]
-        else:
-            code = click.edit(MARKER).split(MARKER, 1)[0]
+            code = click.edit()
     else:
-        if os.name == 'nt':
-            code = 'start "Hylla - {project_name}" /D . \n'
-        else:
-            code = ''
+        code = ''
 
     # Add to database
     add_to_database(project_name, project_dir, tags, config, code)
