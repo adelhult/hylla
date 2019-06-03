@@ -13,11 +13,11 @@
       </p> -->
       <hr/>
       <p>
-          <a>Features</a> •
-          <a>Setup</a> •
-          <a>Usage</a> •
-          <a>Documentation</a> •
-          <a>License</a>
+          <a href="https://github.com/adelhult/hylla#star-features ">Features</a> •
+          <a href="https://github.com/adelhult/hylla#checkered_flag-setup">Setup</a> •
+          <a href="https://github.com/adelhult/hylla#computer-usage">Usage</a> •
+          <a href="https://github.com/adelhult/hylla/wiki">Documentation</a> •
+          <a href="https://github.com/adelhult/hylla#license">License</a>
       </p>
 </div>
 
