@@ -37,7 +37,7 @@ Hylla is quick and easy to setup. Create a directory in which you wish to store 
 
 ## :computer: Usage
 
-It's often easier to learn by looking at a few examples instead of **[reading documentation]()**. In this very simple example below a project named *amazing_project* is created. This means that Hylla automatically creates a directory with the same name but also a README.md documentation file.
+It's often easier to learn by looking at a few examples instead of **[reading documentation](https://github.com/adelhult/hylla/wiki)**. In this very simple example below a project named *amazing_project* is created. This means that Hylla automatically creates a directory but also a README.md documentation file.
 
 ```
 hylla new amazing_project
@@ -57,7 +57,7 @@ hylla new ezgallery web php --commands --github adelhult ezgallery
 
 This single line of code creates a project named *ezgallery* and clones a repo with the same name from my Github account adelhult. The two subject tags *web* and *php* are added as well to make it easier to later search for the project. The `--commands` flag means that a text editor will open and allow you to write a list of commands that are executed every time a project is opened. For example, if it's a coding project you're working on it might be handy to directly open your favourite text editor or execute some custom setup commands.
 
-**More information about using all of Hyllas commands and options can be found by using the `--help` option or reading the [documentation]().**
+**More information about using all of Hyllas commands and options can be found by using the `--help` option or reading the [documentation](https://github.com/adelhult/hylla/wiki).**
 
 # License
 
