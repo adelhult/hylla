@@ -55,7 +55,7 @@ hylla open amazing_project
 hylla new ezgallery web php --commands --github adelhult ezgallery
 ```
 
-This single command creates a project named *ezgallery* and clones a repo with the same name from my Github account adelhult. The two subject tags *web* and *php* are added as well to make it easier to later search for the project. The `--commands` flag means that a text editor will open and allow you to write a list of commands that are executed every time a project is opened. For example, if it's a coding project you're working on it might be handy to directly open your favourite text editor or execute some custom setup commands.
+This single command creates a project named *ezgallery* and clones a repo with the same name from my Github account adelhult. The two subject tags *web* and *php* are added as well to make it easier to later search for the project. The `--commands` flag means that a text editor will open and allow you to write a list of commands that are executed every time the project is opened. For example, if it's a coding project you're working on it might be handy to directly open your favourite text editor or execute some custom setup commands.
 
 **More information about using all of Hyllas commands and options can be found by using the `--help` option or reading the [documentation](https://github.com/adelhult/hylla/wiki).**
 
