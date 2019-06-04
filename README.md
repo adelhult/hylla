@@ -23,13 +23,13 @@
 
 ## :star: Features
 
-* Create project directories and keep them organized in one place.
+* :open_file_folder: Create project directories and keep them organized in one place.
 
-* Generate a README.md file for every project.
+* :scroll: Generate a README.md file for every project.
 
-* List all projects and search for them with subject tags.
+* :mag: List all projects and search for them with subject tags.
 
-* Launch custom scripts and start software every time a project is opened.
+* :rocket: Launch custom scripts and start software every time a project is opened.
 
 ## :checkered_flag: Setup
 
