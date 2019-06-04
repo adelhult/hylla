@@ -29,7 +29,7 @@
 
 * :mag: List all projects and search for them with subject tags.
 
-* :rocket: Launch custom scripts and start software every time a project is opened.
+* :rocket: Execute custom scripts and start software every time a project is opened.
 
 ## :checkered_flag: Setup
 
