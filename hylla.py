@@ -9,11 +9,6 @@ by using the command 'hylla docs'.
 Hylla is a project by Eli Adelhult and is licensed under the MIT license.
 """
 
-# todo:
-# add a remove and edit method to the Project class
-# create the function commands(code)
-# add help attributes to the click options and arguments
-
 
 import os
 import sys
