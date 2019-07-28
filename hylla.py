@@ -73,15 +73,18 @@ class Config(object):
          self.location = False
          self.conn = False
          self.c = False
-pass_config = click.make_pass_decorator(Config, ensure=True)
 
+pass_config = click.make_pass_decorator(Config, ensure=True)
 
 # Creating a click group
 @click.group()
-@click.option('--location',
-              envvar='HYLLA_LOCATION',
-              prompt='Specify a location to store your projects (or set HYLLA_LOCATION)',
-              type=click.Path(exists=True, file_okay=False))
+@click.option(
+    '--location',
+    envvar='HYLLA_LOCATION',
+    prompt='Specify a location to store your projects (or set HYLLA_LOCATION)',
+    type=click.Path(exists=True, file_okay=False),
+    help="Path to the directory where Hylla stores all the projects."
+)
 @pass_config
 def cli(config, location):
     """Hylla - Organize all your projects from the command-line"""
@@ -117,15 +120,40 @@ def open_docs():
 @cli.command('new')
 @click.argument('name')
 @click.argument('tags', nargs=-1)
-@click.option('--readme-template',
-            envvar='HYLLA_README_TEMPLATE',
-            type=click.Path(exists=True, dir_okay=False))
-@click.option('--commands', is_flag=True)
-@click.option('--clone', is_flag=True)
-@click.option('--github', nargs=2)
-@click.option('--migrate',
-            type=click.Path(exists=True, dir_okay=True, file_okay=False))
-@click.option('--no-readme', is_flag=True)
+@click.option(
+    '--readme-template',
+    envvar='HYLLA_README_TEMPLATE',
+    type=click.Path(exists=True, dir_okay=False),
+    help="The template file used to create a project README.md, "
+    "the environmental variable HYLLA_README_TEMPLATE can also be used."
+)
+@click.option(
+    '--commands',
+    is_flag=True,
+    help="Launch a text editor where the user can write a list of commands "
+    "that will be executed every time the project is opened."
+)
+@click.option(
+    '--clone',
+    is_flag=True,
+    help="Clone a git repository."
+)
+@click.option(
+    '--github',
+    nargs=2,
+    help="Clone directly from a Github repository by providing the "
+    "username and repository name with a blank space in between."
+)
+@click.option(
+    '--migrate',
+    type=click.Path(exists=True, dir_okay=True, file_okay=False),
+    help="Copy all the files from an existing directory."
+)
+@click.option(
+    '--no-readme',
+    is_flag=True,
+    help="If the flag is added no README file will be created."
+)
 @pass_config
 def new(config, name, tags, readme_template, commands, clone, github, migrate, no_readme):
     """Create a new project"""
@@ -233,7 +261,11 @@ def new(config, name, tags, readme_template, commands, clone, github, migrate, n
 # 'Open' command:
 @cli.command('open')
 @click.argument('name')
-@click.option('--safe', is_flag=True)
+@click.option(
+    '--safe',
+    is_flag=True,
+    help="Open a project without executing any commands."
+)
 @pass_config
 def open_project(config, name, safe):
     """Open a project"""
@@ -251,7 +283,10 @@ def open_project(config, name, safe):
 # 'Edit' command:
 @cli.command('edit')
 @click.argument('name')
-@click.argument('alternative', type=click.Choice(['name', 'tags', 'commands']))
+@click.argument(
+    'alternative',
+    type=click.Choice(['name', 'tags', 'commands'])
+)
 @pass_config
 def edit(config, name, alternative):
     """Edit a project"""
@@ -335,8 +370,15 @@ def remove(config, name):
 
 # 'List' command:
 @cli.command('list')
-@click.option('--tag')
-@click.option('--detailed', is_flag=True)
+@click.option(
+    '--tag',
+    help="List projects which contain a specific subject tag."
+)
+@click.option(
+    '--detailed',
+    is_flag=True,
+    help="Display detailed information about each project."
+)
 @pass_config
 def list(config, tag, detailed):
     """List and search for projects"""
@@ -371,7 +413,6 @@ def home(config):
     click.launch(config.location, locate=False)
 
 
-# Function used to create the readme file
 def create_readme(template_path, project_dir, project_name):
     """Check if a readme exists, and if not create one."""
     file_path = os.path.join(project_dir, 'README.md')
