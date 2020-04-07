@@ -1,3 +1,4 @@
+**Note: Hylla has been reimplemented in Rust under the name [Pile](https://github.com/adelhult/pile)**
 <div align="center">
     <img width="400" height="280" src="media/logo.svg" alt="Hylla">
       <br>
